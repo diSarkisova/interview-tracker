@@ -1,42 +1,60 @@
-# interview-tracker
+interview-tracker
+Личный трекер поиска работы: собеседования и консультации с карьерным консультантом в одном месте.
+Вместо разрозненных заметок и таблиц — доска и таблица со всеми этапами собеседований (дата, компания, этап, статус, контакты, ссылка на вакансию, обратная связь, вопросы с интервью, % желания получить оффер) и отдельная вкладка для консультаций (тема встречи, вопросы и ответы, домашнее задание с чек-листом выполнения).
+Возможности
+Доска — карточки собеседований по статусам: ожидание / прошёл этап / отказ / оффер
+Таблица — все поля сразу, с сортировкой по колонкам
+Кастомные этапы — свой список этапов собеседования, а не жёстко заданный
+% желания — шкала, чтобы отличать «мечту» от «просто откликнулась, а там жуткий стек»
+Консультации — отдельная таблица с темой встречи, вопросами/ответами и домашним заданием
+Домашнее задание как чек-лист — пункты с чекбоксами и прогресс-баром выполнения прямо в таблице, без захода в карточку
+Стек
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue 3 (Composition API) + Vite
+Pinia — состояние и логика
+Vue Router — навигация между вкладками
+Tailwind CSS v4 — стили
+Supabase — хранение данных
 
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
+Запуск проекта
+1. Установить зависимости
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+2. Настроить переменные окружения
+   Скопируйте `.env.example` в `.env` и впишите свои ключи Supabase:
+```sh
+cp .env.example .env
+```
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+3. Запустить в режиме разработки
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
+4. Собрать для продакшена
 ```sh
 npm run build
+```
+Готовая сборка окажется в папке `dist/` — её можно задеплоить на GitHub Pages, Netlify или Vercel.
+Рекомендуемая настройка IDE
+WebStorm или VS Code + расширение Vue (Official).
+Структура проекта
+```
+src/
+├── assets/         — main.css с подключением Tailwind
+├── ui/             — переиспользуемые примитивы (кнопки, модалки, тумблеры)
+├── components/     — доменные компоненты (карточки, таблицы, формы)
+│   ├── layout/
+│   ├── interview/
+│   └── consultation/
+├── views/          — страницы роутера (доска, таблица, консультации)
+├── stores/         — Pinia: логика собеседований, этапов, консультаций
+├── router/         — маршруты
+├── services/       — клиент Supabase
+├── composables/    — переиспользуемая логика (сортировка, бэкап)
+└── utils/          — форматирование дат, генерация id
 ```
