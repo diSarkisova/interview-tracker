@@ -1,11 +1,9 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-<div>DashboardView страничка</div>
+  <div>DashboardView страничка</div>
 </template>
 
-<style scoped>
+<script setup lang="ts">
+</script>
 
+<style scoped>
 </style>
