@@ -1,8 +1,8 @@
+import {ref, computed} from 'vue'
+import {defineStore} from 'pinia'
 import {onAuthStateChanged, type User} from 'firebase/auth'
 import AuthApi from "@/modules/auth/api/auth.api.ts";
 import {auth} from '@/shared/api/firebase'
-import {defineStore} from 'pinia'
-import {ref, computed} from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
@@ -11,6 +11,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     const isInitialized = ref(false)
     const isAuthenticated = computed(() => Boolean(user.value))
+
+    let isAuthListenerStarted = false
 
     async function loginUser(email: string, password: string) {
         isLoading.value = true
@@ -45,12 +47,19 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    function initAuth() {
-        onAuthStateChanged(auth, (firebaseUser) => {
-            user.value = firebaseUser
-            isInitialized.value = true
-        })
+    async function initAuth() {
+        if (!isAuthListenerStarted) {
+            onAuthStateChanged(auth, (firebaseUser) => {
+                user.value = firebaseUser
+            })
 
+            isAuthListenerStarted = true
+        }
+
+        await auth.authStateReady()
+
+        user.value = auth.currentUser
+        isInitialized.value = true
     }
 
     return {
@@ -58,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
         isAuthenticated,
         isInitialized,
         isLoading,
+
         loginUser,
         registerUser,
         logoutUser,
