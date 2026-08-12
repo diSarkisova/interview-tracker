@@ -1,13 +1,8 @@
+import {onAuthStateChanged, type User} from 'firebase/auth'
+import AuthApi from "@/modules/auth/api/auth.api.ts";
 import {auth} from '@/shared/api/firebase'
-import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    type User
-} from 'firebase/auth'
+import {ref, computed} from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(null);
@@ -17,10 +12,10 @@ export const useAuthStore = defineStore('auth', () => {
     const isInitialized = ref(false)
     const isAuthenticated = computed(() => Boolean(user.value))
 
-    async function login(email: string, password: string) {
+    async function loginUser(email: string, password: string) {
         isLoading.value = true
         try {
-            await signInWithEmailAndPassword(auth, email, password)
+            await AuthApi.login(email, password)
         } catch (error) {
             console.error(error)
         } finally {
@@ -28,10 +23,10 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function register(email: string, password: string) {
+    async function registerUser(email: string, password: string) {
         isLoading.value = true
         try {
-            await createUserWithEmailAndPassword(auth, email, password)
+            await AuthApi.register(email, password)
         } catch (error) {
             console.error(error)
         } finally {
@@ -39,10 +34,10 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    async function logout() {
+    async function logoutUser() {
         isLoading.value = true
         try {
-            await signOut(auth)
+            await AuthApi.logout()
         } catch (error) {
             console.error(error)
         } finally {
@@ -63,9 +58,9 @@ export const useAuthStore = defineStore('auth', () => {
         isAuthenticated,
         isInitialized,
         isLoading,
-        login,
-        register,
-        logout,
+        loginUser,
+        registerUser,
+        logoutUser,
         initAuth
     }
 })
